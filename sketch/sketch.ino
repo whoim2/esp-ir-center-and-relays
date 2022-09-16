@@ -159,6 +159,7 @@ void handle_root() {
       #endif
       command_execute(server.arg(0).toInt());
       server.send(200, "text/plain", "{\"status\":\"ok\",\"text\":\"Готово\",\"value\":\""+server.arg(0)+"\"}");
+      irrecv.enableIRIn();
       return;
     }
   }
