@@ -22,7 +22,9 @@ esp8266/8285 IR universal reciever/sender with HTTP GET actions
 
 В каталоге relay4ch лежит прошивка для esp с четырмя реле, управляемыми по http get. Первые две CMD на скрине выше работают именно с ним.
 
-Схема: ![alt text](https://github.com/whoim2/esp-ir-center-and-relays/raw/main/Screenshot_3.png)
+Схема:
+
+![alt text](https://github.com/whoim2/esp-ir-center-and-relays/raw/main/Screenshot_3.png)
 
 Я использовал TSOP4838 в качестве ИК-приемника, пару TSAL5100 последовательно с резистором 3,3Ом как передатчики, развернув их в разные стороны и неизвестный N-мосфет в sot23, скорее всего IRLML5203 с резистором 680 ом от пина esp к затвору.
 Питается устройство от любого 5в блока питания, мощностью не менее 400ма. Также присутствует линейный стабилизатор 1117-3.3 для питания ESP.
