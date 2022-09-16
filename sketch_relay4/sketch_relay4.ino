@@ -8,7 +8,7 @@
 WiFiManager wifiManager;
 ESP8266WebServer server(80);
 
-String pin = "3363";
+String pin = "1234";
 
 #define R1_PIN 16
 #define R2_PIN 4
