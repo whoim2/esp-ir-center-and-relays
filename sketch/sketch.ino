@@ -15,7 +15,7 @@
 WiFiManager wifiManager;
 ESP8266WebServer server(80);
 
-String pin = "3363"; //for reset
+String pin = "1234"; //for reset
 #define CMD_SIZE 24 //command slots size
 #define IR_RECV_PIN 0 //pin for IR Reciever
 #define IR_LED_PIN 4   //pin for IR Transmitter
