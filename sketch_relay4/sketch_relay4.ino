@@ -23,7 +23,7 @@ String pin = "1234";
 #define USE_MQTT //comment for disable MQTT functional
 // MQTT
 #ifdef USE_MQTT
-const char* mqtt_server = "xx.wqtt.ru";
+const char* mqtt_server = "xx.wqtt.ru"; //wqtt.ru broker 300rub / YEAR
 const int mqtt_port = 1111;
 const char* mqtt_user = "xxxx";
 const char* mqtt_password = "xxxx";
