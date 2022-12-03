@@ -17,7 +17,7 @@ ESP8266WebServer server(80);
 
 #define USE_MQTT //comment for disable MQTT functional
 
-String pin = "1234"; //for reset
+String pin = "3363"; //for reset
 #define CMD_SIZE 24 //command slots size
 #define IR_RECV_PIN 0 //pin for IR Reciever
 #define IR_LED_PIN 4   //pin for IR Transmitter
@@ -468,6 +468,7 @@ void mqtt_reconnect() {
   //load global config
   if (ReadLFS_config("/config", &_gconfig)) {
     if(String(_gconfig._mqtt_host).length() > 3 && _gconfig._mqtt_port > 0) {
+      client.setSocketTimeout(3);
       client.setServer(_gconfig._mqtt_host, _gconfig._mqtt_port);
       client.setCallback(mqtt_callback);
       Serial.print("Attempting MQTT connection...");
