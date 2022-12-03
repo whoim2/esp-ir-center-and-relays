@@ -536,7 +536,11 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length) {
       Serial.print(", cmd: ");
       Serial.println(i);
       #endif
-      command_execute(i);
+      if(data_pay.toInt() == 1) {
+        command_execute(i);
+        String topicToPublish = String(topic);
+        client.publish(topicToPublish.c_str(), "0");
+      }
     }
   }
   led_blink();
