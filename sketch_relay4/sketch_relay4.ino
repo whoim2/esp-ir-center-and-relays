@@ -228,6 +228,7 @@ void setup() {
   #endif
 
   pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);
 
   //fs
   if(!LittleFS.begin()){
