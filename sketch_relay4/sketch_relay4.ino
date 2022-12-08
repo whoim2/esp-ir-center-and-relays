@@ -18,11 +18,17 @@ String pin = "3363";
 
 //comment pins, if not need
 #define R1_PIN 16
-//#define R2_PIN 4
-//#define R3_PIN 3 //RX PIN!
-//#define R4_PIN 14
+#define R2_PIN 4
+#define R3_PIN 3 //RX PIN!
+#define R4_PIN 14
 
 #define USE_MQTT //comment for disable MQTT functional
+
+//for inverse if need
+#define RELAY_ON_STATE HIGH
+#define RELAY_OFF_STATE LOW
+#define RELAY_STARTUP_STATE RELAY_OFF_STATE
+
 
 typedef struct gcfg { //struct for store global config to spiffs file
   #ifdef USE_MQTT
@@ -86,9 +92,9 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length) {
   #ifdef R4_PIN
   if(String(topic) == String(_gconfig.topic_r4)) relay = R4_PIN;
   #endif
-
-  if( relay != 0 ) digitalWrite(relay, data_pay.toInt());
-
+  if( relay != 0 )
+    if(data_pay.toInt() == 1) digitalWrite(relay, RELAY_ON_STATE);
+    else digitalWrite(relay, RELAY_OFF_STATE);
   led_blink(200);
 }
 #endif
@@ -152,8 +158,10 @@ void handle_r() {
   
   //set state
   if(server.arg(0) != "{value}") //not status query from Kyzia
-    if( relay != 0 ) { 
-      digitalWrite(relay, server.arg(0).toInt());
+    if( relay != 0 ) {
+      uint8_t val = HIGH;
+      if(server.arg(0).toInt() == 1) digitalWrite(relay, RELAY_ON_STATE);
+      else digitalWrite(relay, RELAY_OFF_STATE);
       #ifdef USE_MQTT
       if(!topic.isEmpty()) client.publish(topic.c_str(), server.arg(0).c_str(), true);
       #endif
@@ -213,18 +221,18 @@ void setup() {
   #endif
   //pinmode
   pinMode(R1_PIN, OUTPUT);
-  digitalWrite(R1_PIN, LOW);
+  digitalWrite(R1_PIN, RELAY_STARTUP_STATE);
   #ifdef R2_PIN
   pinMode(R2_PIN, OUTPUT);
-  digitalWrite(R2_PIN, LOW);
+  digitalWrite(R2_PIN, RELAY_STARTUP_STATE);
   #endif
   #ifdef R3_PIN
   pinMode(R3_PIN, OUTPUT);
-  digitalWrite(R3_PIN, LOW);
+  digitalWrite(R3_PIN, RELAY_STARTUP_STATE);
   #endif
   #ifdef R4_PIN
   pinMode(R4_PIN, OUTPUT);
-  digitalWrite(R4_PIN, LOW);
+  digitalWrite(R4_PIN, RELAY_STARTUP_STATE);
   #endif
 
   pinMode(LED_BUILTIN, OUTPUT);
