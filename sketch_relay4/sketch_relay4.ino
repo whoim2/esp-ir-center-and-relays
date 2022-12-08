@@ -16,10 +16,11 @@ ESP8266WebServer server(80);
 //reset pin
 String pin = "3363";
 
+//comment pins, if not need
 #define R1_PIN 16
-#define R2_PIN 4
-#define R3_PIN 3
-#define R4_PIN 14
+//#define R2_PIN 4
+//#define R3_PIN 3 //RX PIN!
+//#define R4_PIN 14
 
 #define USE_MQTT //comment for disable MQTT functional
 
@@ -296,7 +297,7 @@ void setup() {
     web += "<div><h4>ESP-RELAY-4</h4>\n";
     web += "<small>http://"+WiFi.localIP().toString()+"/relay?rX=n</small><br>\n";
     //web control
-    web += "<p><div><h5>CONTROL:</h5>\n";
+    web += "<p><div>\n";
     web += "Relay 1 <a class=\"button button-on\" href=\"#\" onclick=\"httpGet('/relay?r1=1');return false;\">ON</a>&nbsp;<a class=\"button button-off\" href=\"#\" onclick=\"httpGet('/relay?r1=0');return false;\">OFF</a><br>\n";
     #ifdef R2_PIN
     web += "Relay 2 <a class=\"button button-on\" href=\"#\" onclick=\"httpGet('/relay?r2=1');return false;\">ON</a>&nbsp;<a class=\"button button-off\" href=\"#\" onclick=\"httpGet('/relay?r2=0');return false;\">OFF</a><br>\n";
