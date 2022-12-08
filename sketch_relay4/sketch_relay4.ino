@@ -1,4 +1,4 @@
-///http://HOME.ddns.net:5008/relay?r1={value}
+///http://ip_addr/relay?r1={value}
 
 #include <ESP8266WiFi.h>          //https://github.com/esp8266/Arduino
 //needed for library
@@ -14,7 +14,7 @@ ESP8266WebServer server(80);
 #define SERIAL_DEBUG
 
 //reset pin
-String pin = "1234";
+String pin = "3363";
 
 #define R1_PIN 16
 #define R2_PIN 4
@@ -293,7 +293,7 @@ void setup() {
     web += "p {font-size: 12px;color: #888;margin-bottom: 5px;}\n";
     web += "div {width: 500px; text-align: right;}\n";
     web += "</style>\n</head>\n<body>\n";
-    web += "<div><h4>ESP-RELAY-4 / whoim@mail.ru<br>see instructions for use</h4>\n";
+    web += "<div><h4>ESP-RELAY-4</h4>\n";
     web += "<small>http://"+WiFi.localIP().toString()+"/relay?rX=n</small><br>\n";
     //web control
     web += "<p><div><h5>CONTROL:</h5>\n";
