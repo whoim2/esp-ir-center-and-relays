@@ -18,8 +18,8 @@ ESP8266WebServer server(80);
 #define USE_MQTT //comment for disable MQTT functional
 
 String pin = "3363"; //for reset
-#define CMD_SIZE 24 //command slots size
-#define IR_RECV_PIN 0 //pin for IR Reciever
+#define CMD_SIZE 10 //command slots size
+#define IR_RECV_PIN 12 //pin for IR Reciever
 #define IR_LED_PIN 4   //pin for IR Transmitter
 #define SERIAL_DEBUG
 
@@ -176,6 +176,8 @@ String ir_to_str(ir_data dataf) {//save ir full packet to string
 void handle_root() {
   String msg;
   irrecv.disableIRIn();
+  //mqtt_connect_timer = millis();
+  //if(client.connected()) client.disconnect();
   //if execute cmd
   if(server.arg("cmd") != "") {
     if(server.arg(0).toInt() >= 0 && server.arg(0).toInt() < CMD_SIZE) {
@@ -189,7 +191,7 @@ void handle_root() {
       return;
     }
   }
-  //if save gloal config
+  //if save global config
   if(server.arg("config") == "1") {
     #ifdef SERIAL_DEBUG
     Serial.println("save global config");
@@ -399,7 +401,7 @@ uint64_t getUInt64fromHex(char const *str) {
 
 void led_blink(){
   digitalWrite(LED_BUILTIN, HIGH);
-  delay(100);
+  delay(50);
   digitalWrite(LED_BUILTIN, LOW);
 }
 
@@ -566,6 +568,12 @@ void setup() {
    #endif
    LittleFS.format();
    ESP.restart();
+  } else {
+    if (!ReadLFS_config("/config", &_gconfig)) {
+        #ifdef SERIAL_DEBUG
+        Serial.println("Load config failed! save it");
+        #endif
+    }
   }
   load_IR_inputs();
   //pins
@@ -610,25 +618,27 @@ void loop() {
     }
     
     //check in events
-    for (uint8_t i = 0; i < CMD_SIZE; i++) {
-      if(ir_ret.value == ir_inputs[i].value) {
-        #ifdef SERIAL_DEBUG
-        Serial.print("Detect command from IR: ");
-        Serial.println(i, DEC);
-        #endif
-        delay(500);
-        command_execute(i);
-      }//ir_ret.value == ir_inputs
-    }//for
-    
+      for (uint8_t i = 0; i < CMD_SIZE; i++) {
+        if(ir_ret.value == ir_inputs[i].value) {
+          #ifdef SERIAL_DEBUG
+          Serial.print("Detect command from IR: ");
+          Serial.println(i, DEC);
+          #endif
+          delay(500);
+          command_execute(i);
+        }//ir_ret.value == ir_inputs
+      }//for
+
     led_blink();
     irrecv.resume();
   }
   //ticks
   #ifdef USE_MQTT
-  if(mqtt_connect_timer + 15000 < millis())
-      if (!client.connected()) mqtt_reconnect();
-
+  if (!client.connected()) {
+    if(mqtt_connect_timer + 15000 < millis()) {
+        mqtt_reconnect();
+    }
+  }
   if (client.connected()) client.loop();
   #endif
   
